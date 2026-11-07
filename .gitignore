@@ -3,11 +3,12 @@ __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
 
-# Résultats générés pendant les étapes suivantes
+# Figures finales de l'EDA, versionnées pour la documentation GitHub
 results/figures/*
+!results/figures/*.png
+
+# Tableaux et résultats intermédiaires, ignorés par défaut
 results/tables/*
-!results/figures/.gitkeep
-!results/tables/.gitkeep
 # Fichiers contenant potentiellement des secrets
 .env
 .env.*
