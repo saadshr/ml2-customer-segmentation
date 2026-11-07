@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Résultats générés pendant les étapes suivantes
+results/figures/*
+results/tables/*
+!results/figures/.gitkeep
+!results/tables/.gitkeep
+# Fichiers contenant potentiellement des secrets
+.env
+.env.*
+!.env.example
+
+# Fichiers temporaires Windows
+Thumbs.db
+.DS_Store
