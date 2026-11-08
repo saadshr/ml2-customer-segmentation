@@ -9,6 +9,8 @@ results/figures/*
 
 # Tableaux et résultats intermédiaires, ignorés par défaut
 results/tables/*
+!results/tables/
+!results/tables/*.csv
 # Fichiers contenant potentiellement des secrets
 .env
 .env.*
