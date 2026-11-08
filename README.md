@@ -1,42 +1,48 @@
-# Customer Segmentation using Unsupervised Machine Learning
+# Customer Segmentation Using Unsupervised Machine Learning
 
-**Segmentation intelligente des clients d'un distributeur en gros — étude comparative de K-Means, CAH et DBSCAN**
+**Segmentation intelligente des clients d'un distributeur en gros — comparaison de K-Means, CAH Ward et DBSCAN**
 
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Scikit-learn](https://img.shields.io/badge/Scikit--learn-implemented-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?logo=jupyter&logoColor=white)](https://jupyter.org/)
-[![Project Status](https://img.shields.io/badge/Project%20Status-Algorithms%20implemented-2ea44f)](#results)
+[![scikit--learn](https://img.shields.io/badge/scikit--learn-clustering-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+[![Jupyter](https://img.shields.io/badge/Jupyter-notebooks-F37626?logo=jupyter&logoColor=white)](https://jupyter.org/)
+[![Status](https://img.shields.io/badge/Project%20status-final%20academic%20version-2ea44f)](#résultats-et-comparaison)
 
-Projet académique de **Machine Learning 2** réalisé par des étudiants ingénieurs de l'ENSAM Rabat.
+Projet académique du module **Machine Learning 2**, réalisé à l’**ENSAM Rabat**, filière **INDIA**, année universitaire **2026/2027**.
 
-## Project Overview
+## Présentation du projet
 
-Un distributeur en gros peut servir des commerces, des hôtels ou des restaurants ayant des comportements d'achat différents. Ce projet cherche à découvrir des groupes de clients présentant des profils de dépenses similaires, sans disposer de labels commerciaux préexistants.
+Un distributeur en gros peut servir des clients dont les comportements d’achat sont très différents. L’objectif de ce projet est de découvrir des groupes de clients présentant des profils de dépenses proches, sans étiquette commerciale fournie à l’avance.
 
-L'approche est un apprentissage non supervisé : les algorithmes construisent des groupes à partir des six variables de dépenses. Les segments sont ensuite décrits dans l'échelle originale et comparés avec `Channel` et `Region`, qui sont réservées à l'interprétation.
+Le projet suit une démarche d’apprentissage non supervisé : les ressemblances sont calculées sur six catégories de dépenses annuelles, puis les groupes sont décrits dans les unités originales. `Channel` et `Region` restent hors des distances, car ce sont des variables catégorielles codées en entiers ; elles sont réservées à l’interprétation.
 
-Le prétraitement principal utilisé pour les distances est `log1p + StandardScaler`. Les trois méthodes implémentées sont K-Means, la Classification Ascendante Hiérarchique (CAH) avec liaison Ward et DBSCAN.
+Les objectifs sont de :
 
-## Dataset Description
+- comprendre la structure et la qualité du dataset ;
+- analyser les distributions, les valeurs extrêmes et les corrélations ;
+- comparer K-Means, la CAH avec liaison Ward et DBSCAN ;
+- évaluer les partitions avec des métriques adaptées à leur couverture ;
+- interpréter les profils avec prudence, sans transformer les clusters en vérités commerciales.
 
-Le dataset **Wholesale Customers** provient de l'[UCI Machine Learning Repository, dataset 292](https://archive.ics.uci.edu/dataset/292/wholesale+customers). Il contient **440 clients** et **8 colonnes**.
+## Dataset
 
-| Variable | Signification | Type dans l'analyse | Utilisation |
+Le dataset **Wholesale Customers** provient de l’[UCI Machine Learning Repository, ID 292](https://archive.ics.uci.edu/dataset/292/wholesale+customers). Il contient 440 observations et 8 variables. Aucune unité monétaire n’est inventée dans ce projet.
+
+| Variable | Signification | Nature dans l’analyse | Rôle |
 |---|---|---|---|
 | `Channel` | Canal commercial codé | Catégorielle | Interprétation uniquement |
-| `Region` | Région du client codée | Catégorielle | Interprétation uniquement |
-| `Fresh` | Dépenses annuelles en produits frais | Numérique quantitative | Clustering |
-| `Milk` | Dépenses annuelles en produits laitiers | Numérique quantitative | Clustering |
-| `Grocery` | Dépenses annuelles en épicerie | Numérique quantitative | Clustering |
-| `Frozen` | Dépenses annuelles en produits surgelés | Numérique quantitative | Clustering |
-| `Detergents_Paper` | Dépenses annuelles en détergents et papier | Numérique quantitative | Clustering |
-| `Delicassen` | Dépenses annuelles en produits delicatessen | Numérique quantitative | Clustering |
+| `Region` | Région codée | Catégorielle | Interprétation uniquement |
+| `Fresh` | Dépenses annuelles en produits frais | Quantitative | Distance et clustering |
+| `Milk` | Dépenses annuelles en produits laitiers | Quantitative | Distance et clustering |
+| `Grocery` | Dépenses annuelles en épicerie | Quantitative | Distance et clustering |
+| `Frozen` | Dépenses annuelles en produits surgelés | Quantitative | Distance et clustering |
+| `Detergents_Paper` | Dépenses annuelles en détergents et papier | Quantitative | Distance et clustering |
+| `Delicassen` | Dépenses annuelles en produits delicatessen | Quantitative | Distance et clustering |
 
-Aucune unité monétaire n'est ajoutée. Le CSV original est conservé dans [data/raw/Wholesale customers data.csv](data/raw/Wholesale%20customers%20data.csv).
+Le fichier original est conservé dans [`data/raw/`](data/raw/) : [`Wholesale customers data.csv`](data/raw/Wholesale%20customers%20data.csv).
 
-## Project Architecture
+## Architecture du projet
 
-~~~text
+```text
 ML2-Customer-Segmentation/
 ├── data/
 │   ├── raw/
@@ -55,209 +61,232 @@ ML2-Customer-Segmentation/
 │   ├── 04_kmeans_clustering.ipynb
 │   └── 05_cah_dbscan_comparison.ipynb
 ├── results/
-│   ├── figures/
-│   │   ├── 01_histogrammes_kde_depenses.png
-│   │   ├── 02_boxplots_depenses_iqr.png
-│   │   ├── 03_heatmap_correlations_depenses.png
-│   │   ├── 04_scatterplots_relations_depenses_channel.png
-│   │   ├── 05_repartition_channel_region.png
-│   │   ├── 06_comparaison_depenses_par_channel.png
-│   │   ├── 07_preprocessing_distributions_comparison.png
-│   │   ├── 08_preprocessing_boxplots_comparison.png
-│   │   ├── 09_kmeans_elbow.png
-│   │   ├── 10_kmeans_silhouette.png
-│   │   ├── 11_kmeans_cluster_profiles_heatmap.png
-│   │   ├── 12_kmeans_cluster_means.png
-│   │   ├── 13_kmeans_pca_projection.png
-│   │   ├── 14_cah_dendrogramme_ward.png
-│   │   ├── 15_cah_silhouette.png
-│   │   ├── 16_dbscan_grid_results.png
-│   │   ├── 17_comparison_silhouette.png
-│   │   └── 18_profiles_methods_original.png
-│   └── tables/
-│       ├── cah_search_metrics.csv
-│       ├── cluster_profiles_all_methods_original.csv
-│       ├── comparison_kmeans_cah_dbscan.csv
-│       ├── dbscan_grid_metrics.csv
-│       ├── kmeans_centroids_prepared.csv
-│       ├── kmeans_client_labels.csv
-│       ├── kmeans_cluster_channel_region.csv
-│       ├── kmeans_cluster_profiles_original.csv
-│       ├── kmeans_pca_coordinates.csv
-│       └── kmeans_search_metrics.csv
+│   ├── figures/                 # figures EDA, prétraitement et clustering
+│   └── tables/                  # métriques, labels et profils
 ├── src/
 │   ├── check_dataset.py
 │   └── preprocessing.py
-├── .vscode/
-│   └── settings.json
+├── reports/
+│   ├── ML2_customer_segmentation_overleaf.zip
+│   └── latex/                   # sources, figures, tableaux et PDF du rapport
+├── presentation/
+│   ├── ML2_Customer_Segmentation_FINAL.pptx
+│   ├── SCRIPT_SOUTENANCE.md
+│   ├── QUESTIONS_REPONSES.md
+│   └── GUIDE_SOUTENANCE.md
 ├── .gitignore
 ├── README.md
-└── requirements.txt
-~~~
+├── requirements.txt
+└── .vscode/settings.json
+```
 
-- `data/raw/` contient le dataset source intact.
-- `data/processed/` contient les trois matrices préparées et les transformateurs sauvegardés.
-- `notebooks/` contient les analyses exécutées dans l'ordre.
-- `results/figures/` contient les graphiques exportés de l'EDA, du prétraitement et du clustering.
-- `results/tables/` contient les métriques, labels, centroïdes et profils des clusters.
-- `models/` contient le modèle K-Means final sauvegardé.
-- `src/` contient les scripts de contrôle et de prétraitement réutilisables.
-- `.vscode/` contient la configuration locale recommandée pour VS Code.
+Les anciennes versions de présentation et les scripts de génération sont conservés séparément dans [`presentation/archive/`](presentation/archive/) et exclus du versionnement par `.gitignore`.
 
-## Installation and Setup
+- `data/` contient les données originales et les matrices préparées ;
+- `notebooks/` contient les étapes scientifiques dans l’ordre ;
+- `src/` contient les contrôles et fonctions réutilisables ;
+- `results/` contient les figures et tableaux produits ;
+- `models/` contient le modèle K-Means sauvegardé ;
+- `reports/` contient le rapport LaTeX, son PDF et l’archive Overleaf ;
+- `presentation/` contient uniquement les livrables officiels de soutenance.
+
+## Pipeline Machine Learning
+
+```mermaid
+flowchart LR
+    A[Dataset UCI] --> B[Compréhension]
+    B --> C[EDA]
+    C --> D[Prétraitement]
+    D --> E[K-Means]
+    D --> F[CAH Ward]
+    D --> G[DBSCAN]
+    E --> H[Évaluation]
+    F --> H
+    G --> H
+    H --> I[Profils dans les dépenses originales]
+    I --> J[Conclusions prudentes]
+```
+
+## Analyse exploratoire
+
+Les dépenses présentent des asymétries positives. La skewness de `Delicassen` atteint 11,152. La règle IQR signale 172 valeurs cumulées sur les six dépenses ; ces signalements ne correspondent pas nécessairement à 172 clients distincts et aucune observation n’est supprimée.
+
+La corrélation de Pearson la plus forte concerne `Grocery` et `Detergents_Paper` avec `r = 0,925`. Cette association est descriptive et ne démontre pas de causalité.
+
+![Distributions des dépenses](results/figures/01_histogrammes_kde_depenses.png)
+
+![Corrélations entre dépenses](results/figures/03_heatmap_correlations_depenses.png)
+
+![Boxplots et signalements IQR](results/figures/02_boxplots_depenses_iqr.png)
+
+## Prétraitement
+
+Trois stratégies ont été produites :
+
+1. `StandardScaler` seul ;
+2. `log1p` puis `StandardScaler` ;
+3. `log1p` puis `RobustScaler`.
+
+`log1p(x) = log(1+x)` compresse les grandes dépenses. `StandardScaler` centre et réduit les variables, tandis que `RobustScaler` s’appuie sur la médiane et l’IQR.
+
+La stratégie principale est **`log1p + StandardScaler`**, car elle répond aux asymétries et aux différences d’échelle observées dans l’EDA. Elle constitue une candidate méthodologique, pas un optimum universel démontré. Les stratégies A et C restent utiles pour une analyse de sensibilité.
+
+![Comparaison des distributions avant et après prétraitement](results/figures/07_preprocessing_distributions_comparison.png)
+
+## Algorithmes
+
+| Méthode | Principe | Paramètres ou décision | Limite observée |
+|---|---|---|---|
+| **K-Means** | Affectation aux centroïdes et minimisation de l’inertie | `K=2`, `init="k-means++"`, `n_init=20`, `random_state=42` | Nécessite `K` et préfère des groupes compacts |
+| **CAH Ward** | Fusions hiérarchiques contrôlant l’augmentation de variance | `linkage="ward"`, recherche de `K=2` à `6` | Dépend du linkage et de la coupe |
+| **DBSCAN** | Groupes selon la densité et identification du bruit | `eps=0,80`, `min_samples=5` | Sensible aux paramètres et couverture faible ici |
+
+### K-Means
+
+K-Means teste plusieurs valeurs de `K` avec l’initialisation K-Means++. L’Elbow suit l’inertie, tandis que la silhouette mesure la cohésion et la séparation. La PCA affichée dans le projet sert uniquement à projeter les six dimensions en deux axes ; K-Means n’est pas entraîné sur PC1 et PC2.
+
+![Méthode Elbow](results/figures/09_kmeans_elbow.png)
+
+![Silhouette K-Means](results/figures/10_kmeans_silhouette.png)
+
+![Projection PCA des clusters](results/figures/13_kmeans_pca_projection.png)
+
+### CAH Ward
+
+La CAH commence avec une observation par groupe et fusionne progressivement les groupes. Ward choisit les fusions qui augmentent le moins la variance intra-classe.
+
+![Dendrogramme CAH Ward](results/figures/14_cah_dendrogramme_ward.png)
+
+### DBSCAN
+
+DBSCAN utilise un rayon `eps` et un seuil `min_samples`. Les points qui ne satisfont pas la densité locale peuvent être classés comme bruit.
+
+![Grille des résultats DBSCAN](results/figures/16_dbscan_grid_results.png)
+
+## Résultats et comparaison
+
+Les résultats proviennent des notebooks et des tableaux exportés dans [`results/tables/`](results/tables/).
+
+| Méthode | Clusters | Silhouette | Points évalués | Couverture | Bruit | Effectifs |
+|---|---:|---:|---:|---:|---:|---|
+| K-Means | 2 | 0,2903 | 440 | 100 % | 0 % | 252 / 188 |
+| CAH Ward | 2 | 0,2585 | 440 | 100 % | 0 % | 178 / 262 |
+| DBSCAN (`eps=0,80`, `min_samples=5`) | 3 | 0,2885* | 210* | 47,73 % | 52,27 % | 200 / 5 / 5 |
+
+`*` La silhouette DBSCAN est calculée uniquement sur les 210 observations non bruitées. Elle n’est donc pas directement comparable aux scores K-Means et CAH, calculés sur les 440 clients.
+
+![Comparaison des silhouettes](results/figures/17_comparison_silhouette.png)
+
+![Profils originaux selon les méthodes](results/figures/18_profiles_methods_original.png)
+
+### Conclusion scientifique
+
+Parmi les configurations testées, **K-Means représente le meilleur compromis** entre couverture complète, effectifs raisonnables, interprétabilité et silhouette complète légèrement supérieure à celle de la CAH. La séparation reste toutefois **modeste** : les groupes se recouvrent partiellement et ne doivent pas être présentés comme des segments parfaitement séparés.
+
+DBSCAN est informatif pour étudier la densité et les observations atypiques, mais sa configuration retenue classe 52,27 % des clients comme bruit. Son score hors bruit doit donc être interprété avec prudence.
+
+## Installation et exécution sous Windows
 
 ### Prérequis
 
 - Windows PowerShell ;
 - Python 3.12 ;
 - Git ;
-- Visual Studio Code avec les extensions Python et Jupyter.
+- VS Code avec les extensions Python et Jupyter.
 
-### Installation sous PowerShell
+### Installation
 
-~~~powershell
+```powershell
 git clone https://github.com/saadshr/ml2-customer-segmentation.git
 cd ml2-customer-segmentation
 
-& "C:\Program Files\Python312\python.exe" -m venv .venv
+py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
-
 python -m pip install -r requirements.txt
-~~~
+```
 
-Si l'activation PowerShell est bloquée pour la session courante :
+Si l’activation PowerShell est bloquée pour la session courante :
 
-~~~powershell
+```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\.venv\Scripts\Activate.ps1
-~~~
+```
 
-L'environnement peut aussi être utilisé directement sans activation :
+L’environnement peut aussi être utilisé directement :
 
-~~~powershell
+```powershell
 & ".\.venv\Scripts\python.exe" -m pip install -r requirements.txt
 & ".\.venv\Scripts\jupyter.exe" notebook
-~~~
+```
 
-Dans VS Code, sélectionner `.venv\Scripts\python.exe` comme interpréteur et `Python 3.12 (.venv)` comme kernel des notebooks.
+Dans VS Code, choisir `.venv\Scripts\python.exe` comme interpréteur et comme kernel Jupyter.
 
-## Execution Order
+### Ordre d’exécution
 
 Depuis la racine du dépôt :
 
-~~~powershell
+```powershell
 & ".\.venv\Scripts\python.exe" src\check_dataset.py
-& ".\.venv\Scripts\jupyter.exe" nbconvert --to notebook --execute --inplace notebooks\01_dataset_understanding.ipynb
-& ".\.venv\Scripts\jupyter.exe" nbconvert --to notebook --execute --inplace notebooks\02_exploratory_data_analysis.ipynb
-& ".\.venv\Scripts\jupyter.exe" nbconvert --to notebook --execute --inplace notebooks\03_data_preprocessing.ipynb
-& ".\.venv\Scripts\jupyter.exe" nbconvert --to notebook --execute --inplace notebooks\04_kmeans_clustering.ipynb
-& ".\.venv\Scripts\jupyter.exe" nbconvert --to notebook --execute --inplace notebooks\05_cah_dbscan_comparison.ipynb
-~~~
+& ".\.venv\Scripts\jupyter.exe" nbconvert --to notebook --execute notebooks\01_dataset_understanding.ipynb
+& ".\.venv\Scripts\jupyter.exe" nbconvert --to notebook --execute notebooks\02_exploratory_data_analysis.ipynb
+& ".\.venv\Scripts\jupyter.exe" nbconvert --to notebook --execute notebooks\03_data_preprocessing.ipynb
+& ".\.venv\Scripts\jupyter.exe" nbconvert --to notebook --execute notebooks\04_kmeans_clustering.ipynb
+& ".\.venv\Scripts\jupyter.exe" nbconvert --to notebook --execute notebooks\05_cah_dbscan_comparison.ipynb
+```
 
-Les sorties sont conservées dans les notebooks et les fichiers produits dans `data/processed/`, `results/` et `models/`. Le CSV original n'est pas modifié.
+Les notebooks exportent leurs résultats dans `data/processed/`, `results/` et `models/`. Le dataset original reste inchangé.
 
-## Machine Learning Pipeline
+## Reproductibilité
 
-~~~mermaid
-flowchart LR
-    A[Dataset] --> B[Data Understanding<br/>✅ terminé]
-    B --> C[EDA<br/>✅ terminée]
-    C --> D[Preprocessing<br/>✅ terminé]
-    D --> E[Clustering<br/>✅ terminé]
-    E --> F[Evaluation<br/>✅ terminée]
-    F --> G[Customer Profiling<br/>✅ réalisé]
-    G --> H[Conclusions prudentes<br/>✅ documentées]
-~~~
+- Python 3.12 dans l’environnement `.venv` ;
+- dépendances listées dans [`requirements.txt`](requirements.txt) ;
+- graine K-Means : `random_state=42` ;
+- initialisation : `k-means++`, `n_init=20` ;
+- données originales dans [`data/raw/`](data/raw/) ;
+- matrices préparées dans [`data/processed/`](data/processed/) ;
+- résultats graphiques et tabulaires dans [`results/`](results/) ;
+- ordre des notebooks indiqué ci-dessus.
 
-## Algorithms
+La reproductibilité de l’exécution ne constitue pas une étude de stabilité inter-échantillons. La stabilité des partitions reste une perspective.
 
-| Méthode | Principe | Atout | Limite observée |
-|---|---|---|---|
-| **K-Means** | Affecte les clients au centroïde le plus proche et minimise l'inertie. | Simple, reproductible et couverture complète. | Nécessite `K` et préfère des groupes compacts. |
-| **CAH Ward** | Fusionne progressivement les groupes en contrôlant l'augmentation de variance. | Dendrogramme interprétable. | Dépend du linkage et du choix de `K`. |
-| **DBSCAN** | Forme des groupes selon la densité et identifie les points de bruit. | Peut isoler les observations atypiques. | Très sensible à `eps` et `min_samples`. |
+## Rapport et présentation
 
-Les trois méthodes sont implémentées dans les notebooks 04 et 05. Les numéros de clusters ne sont pas comparables directement entre méthodes.
+- [Rapport final PDF](reports/latex/main.pdf)
+- [Sources LaTeX](reports/latex/main.tex)
+- [Archive Overleaf](reports/ML2_customer_segmentation_overleaf.zip)
+- [Présentation finale de 29 diapositives](presentation/ML2_Customer_Segmentation_FINAL.pptx)
+- [Script de soutenance](presentation/SCRIPT_SOUTENANCE.md)
+- [Questions/réponses](presentation/QUESTIONS_REPONSES.md)
+- [Guide de soutenance](presentation/GUIDE_SOUTENANCE.md)
 
-## Results
+## Limites et perspectives
 
-Les métriques ci-dessous proviennent des exécutions réelles sur les six variables préparées.
+- La séparation interne reste modeste.
+- DBSCAN couvre moins de la moitié des clients dans la configuration retenue.
+- Les résultats dépendent de l’espace préparé et des paramètres des méthodes.
+- Les dépenses sont agrégées et ne décrivent pas toute la valeur client.
+- La stabilité des clusters doit encore être étudiée.
+- Les profils doivent être validés avec des informations métier et des actions commerciales réelles.
 
-| Méthode | Clusters | Silhouette | Points évalués | Couverture | Bruit | Effectifs |
-|---|---:|---:|---:|---:|---:|---|
-| K-Means | 2 | 0,2903 | 440 | 100 % | 0 % | 252, 188 |
-| CAH Ward | 2 | 0,2585 | 440 | 100 % | 0 % | 178, 262 |
-| DBSCAN (`eps=0,80`, `min_samples=5`) | 3 | 0,2885* | 210* | 47,73 % | 52,27 % | 200, 5, 5 |
+Ces éléments sont des limites ou des perspectives ; ils ne sont pas présentés comme des analyses déjà réalisées.
 
-`*` Pour DBSCAN, la silhouette est calculée uniquement sur les 210 points non bruités. Elle n'est donc pas directement comparable aux scores K-Means et CAH calculés sur les 440 clients. Une configuration DBSCAN obtenant une silhouette plus élevée mais une couverture très faible n'est pas retenue comme meilleur compromis.
+## Références
 
-### Conclusion scientifique
-
-Parmi les configurations testées, **K-Means est retenu comme le meilleur compromis** : il couvre les 440 clients, produit deux groupes de taille raisonnable et obtient la meilleure silhouette complète (**0,2903**). La CAH Ward donne une partition proche mais légèrement moins bien séparée (**0,2585**). DBSCAN est utile pour révéler des observations considérées comme du bruit, mais sa configuration analysée exclut **52,27 %** des clients ; son score hors bruit doit donc être interprété avec prudence.
-
-La silhouette de K-Means reste modeste. Elle suggère une séparation limitée ou des profils qui se recouvrent partiellement ; elle ne doit pas être présentée comme une segmentation parfaite. Les résultats sont des supports d'analyse exploratoire et ne prouvent aucune causalité commerciale.
-
-## Exploratory Data Analysis
-
-L'EDA a été réalisée dans [02_exploratory_data_analysis.ipynb](notebooks/02_exploratory_data_analysis.ipynb). Les dépenses présentent des asymétries positives et des valeurs extrêmes potentielles. Les corrélations les plus fortes observées sont `Grocery`–`Detergents_Paper` (**0,925**), `Milk`–`Grocery` (**0,728**) et `Milk`–`Detergents_Paper` (**0,662**). Ces associations ne démontrent pas de causalité.
-
-### Figures principales
-
-![Distributions des dépenses](results/figures/01_histogrammes_kde_depenses.png)
-
-![Corrélations entre dépenses](results/figures/03_heatmap_correlations_depenses.png)
-
-![Profils K-Means](results/figures/11_kmeans_cluster_profiles_heatmap.png)
-
-![Dendrogramme CAH Ward](results/figures/14_cah_dendrogramme_ward.png)
-
-![Résultats DBSCAN](results/figures/16_dbscan_grid_results.png)
-
-![Comparaison des silhouettes](results/figures/17_comparison_silhouette.png)
-
-![Profils originaux selon la méthode](results/figures/18_profiles_methods_original.png)
-
-## Evaluation Details
-
-Les notebooks utilisent principalement :
-
-- **Silhouette Score** pour la cohésion et la séparation ;
-- **inertie et méthode du coude** pour K-Means ;
-- **effectifs et couverture** pour vérifier qu'une solution n'est pas dominée par un groupe minuscule ou par le bruit ;
-- **profils moyens dans l'échelle originale** pour l'interprétation commerciale.
-
-Les scores DBSCAN sont toujours accompagnés du nombre de points évalués. Cette précaution évite de comparer directement une silhouette calculée sur un sous-ensemble avec une silhouette calculée sur les 440 clients.
-
-## Reproducibility
-
-- Environnement : Python 3.12 dans `.venv`.
-- Dépendances : [requirements.txt](requirements.txt).
-- Source : [data/raw/Wholesale customers data.csv](data/raw/Wholesale%20customers%20data.csv).
-- Prétraitement principal : `log1p + StandardScaler`.
-- K-Means : `init="k-means++"`, `n_init=20`, `random_state=42`.
-- Les chemins utilisés dans les notebooks sont construits à partir de la racine du projet et restent relatifs au dépôt.
-- L'ordre d'exécution recommandé est celui présenté dans [Execution Order](#execution-order).
-
-## Limitations and Future Work
-
-Le dataset contient 440 clients et six catégories de dépenses, mais peu de variables explicatives métier. Les dépenses sont agrégées annuellement, les catégories `Channel` et `Region` sont codées, et la silhouette montre une séparation modeste.
-
-Les prolongements possibles sont l'analyse de sensibilité des hyperparamètres, la comparaison de plusieurs prétraitements, l'étude plus détaillée des profils et la validation métier des segments. Toute interprétation doit rester descriptive et être confirmée par le contexte commercial.
-
-## References
-
-- [UCI Machine Learning Repository — Wholesale Customers, ID 292](https://archive.ics.uci.edu/dataset/292/wholesale+customers)
+- [UCI Machine Learning Repository — Wholesale Customers](https://archive.ics.uci.edu/dataset/292/wholesale+customers)
 - [Scikit-learn — Clustering](https://scikit-learn.org/stable/modules/clustering.html)
-- [Scikit-learn — Clustering metrics](https://scikit-learn.org/stable/modules/clustering.html#clustering-performance-evaluation)
+- [Scikit-learn — Évaluation du clustering](https://scikit-learn.org/stable/modules/clustering.html#clustering-performance-evaluation)
 - [SciPy — Hierarchical clustering](https://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html)
 - [Pandas documentation](https://pandas.pydata.org/docs/)
 - [Seaborn documentation](https://seaborn.pydata.org/)
 
-## Authors
+## Auteurs
 
-Projet réalisé par des étudiants ingénieurs de l'**ENSAM Rabat**.
+Projet réalisé par :
 
-Membres du groupe :
+- **Saad Sahraoui**
+- **Hassan El Hajjam**
 
-- Saad Sahraoui
-- Hassan El Hajjam
+**ENSAM Rabat — Filière INDIA**  
+**Module : Machine Learning 2**  
+**Encadrante : Pr. Safaâ Dafrallah**  
+**Année universitaire : 2026/2027**

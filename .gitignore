@@ -1,5 +1,7 @@
 .venv/
+**/__pycache__/
 __pycache__/
+*.pyc
 *.py[cod]
 .ipynb_checkpoints/
 
@@ -15,6 +17,9 @@ results/tables/*
 .env
 .env.*
 !.env.example
+
+# Archives locales de versions provisoires et prompts de travail
+presentation/archive/
 
 # Fichiers temporaires Windows
 Thumbs.db
