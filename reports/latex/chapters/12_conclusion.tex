@@ -1,0 +1,11 @@
+\chapter{Conclusion générale}
+
+Le projet a étudié la segmentation de 440 clients d'un distributeur en gros à partir de six dépenses annuelles. La démarche a commencé par la conservation du CSV original, le contrôle de sa qualité et une EDA complète. Les données ne contiennent aucune valeur manquante, aucun doublon exact et aucune dépense négative. Les distributions sont positivement asymétriques et la règle IQR signale 172 valeurs cumulées, sans justifier leur suppression automatique.
+
+Trois stratégies de prétraitement ont été comparées. La stratégie principale \texttt{log1p + StandardScaler} compresse les grandes valeurs puis donne aux six dépenses une échelle comparable. StandardScaler seul et \texttt{log1p + RobustScaler} restent disponibles pour l'analyse de sensibilité.
+
+K-Means, avec \texttt{k-means++}, \texttt{n\_init=20} et \texttt{random\_state=42}, retient $K=2$. Sa silhouette est 0,2903, son inertie est 1844,0641 et ses groupes contiennent 252 et 188 clients. La CAH Ward retient également $K=2$, avec une silhouette de 0,2585 et des effectifs 178 et 262. DBSCAN met en évidence une structure de densité, mais la configuration analysée produit 52,27\% de bruit ; sa silhouette 0,2885 est calculée sur 210 clients seulement.
+
+K-Means est donc retenu comme meilleur compromis parmi les configurations testées, car il fournit la meilleure silhouette sur l'ensemble complet avec des effectifs équilibrés. Cette conclusion reste prudente : 0,2903 est une séparation positive mais modeste. Les groupes ne doivent pas être présentés comme parfaitement séparés ni comme des catégories causales.
+
+Les perspectives sont l'ajout de variables métier, l'étude temporelle des commandes, la validation par des experts commerciaux et l'analyse de stabilité sur d'autres périodes ou échantillons. Une future comparaison pourrait également étudier systématiquement la sensibilité des résultats aux trois prétraitements, sans remettre en cause la conservation du dataset original.

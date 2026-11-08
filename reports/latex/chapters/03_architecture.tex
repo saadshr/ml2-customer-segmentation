@@ -1,0 +1,32 @@
+\chapter{Architecture technique du projet}
+
+\section{Environnement logiciel}
+Le projet est développé sous Windows avec Python 3.12, VS Code et Jupyter. Les principales bibliothèques sont Pandas et NumPy pour la manipulation numérique, Matplotlib et Seaborn pour les figures, Scikit-learn pour le prétraitement et les algorithmes, et SciPy pour le dendrogramme hiérarchique. Git et GitHub assurent le versionnement du projet.
+
+Codex a servi d'assistance au développement et à la documentation. Il ne remplace pas la vérification des sorties : les résultats présentés dans ce rapport proviennent des fichiers exécutés et des tableaux exportés dans le dépôt.
+
+\section{Organisation des fichiers}
+La structure complète est documentée dans le README du projet. Les répertoires ont les responsabilités suivantes :
+\begin{description}
+  \item[\texttt{data/raw/}] conserve le CSV original sans modification ;
+  \item[\texttt{data/processed/}] contient les trois matrices préparées et le fichier des transformateurs ;
+  \item[\texttt{notebooks/}] contient cinq notebooks exécutés dans l'ordre ;
+  \item[\texttt{src/}] regroupe le contrôle du dataset et les fonctions de prétraitement ;
+  \item[\texttt{models/}] conserve le modèle K-Means final ;
+  \item[\texttt{results/figures/}] contient les 18 graphiques exportés ;
+  \item[\texttt{results/tables/}] contient les métriques, les labels, les centroïdes et les profils ;
+  \item[\texttt{reports/}] accueille le présent projet LaTeX.
+\end{description}
+
+\section{Pipeline reproductible}
+Le pipeline conceptuel est :
+\begin{center}
+\fbox{Dataset} $\rightarrow$ \fbox{Analyse} $\rightarrow$ \fbox{EDA} $\rightarrow$ \fbox{Prétraitement} $\rightarrow$ \fbox{Clustering} $\rightarrow$ \fbox{Évaluation} $\rightarrow$ \fbox{Interprétation}
+\end{center}
+
+Le notebook 01 contrôle la structure. Le notebook 02 produit l'EDA. Le notebook 03 compare les stratégies de prétraitement et exporte les matrices. Le notebook 04 entraîne K-Means avec \texttt{random\_state=42}. Le notebook 05 compare la CAH Ward et DBSCAN aux résultats K-Means existants.
+
+\section{Reproductibilité et traçabilité}
+La reproductibilité repose sur plusieurs choix : les chemins sont construits à partir de la racine du projet, les features sont conservées dans un ordre explicite, les graines aléatoires sont fixées pour K-Means, et les résultats sont exportés avec des noms stables. Le CSV original n'est jamais écrasé.
+
+Les données préparées utilisent un index \texttt{customer\_index}, qui est uniquement un identifiant. Les labels sont réalignés avec le fichier original par ordre de ligne avant de calculer les profils de dépenses. Cette étape évite d'attribuer un profil au mauvais client.

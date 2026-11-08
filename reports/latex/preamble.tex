@@ -1,0 +1,49 @@
+\usepackage[a4paper,margin=2.5cm,headheight=25pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs,longtable,tabularx,array,multirow}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tcolorbox}
+\usepackage{lastpage}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{csquotes}
+\usepackage[backend=biber,style=authoryear,sorting=nyt]{biblatex}
+\addbibresource{references.bib}
+
+\definecolor{navy}{HTML}{12304A}
+\definecolor{gold}{HTML}{B8903A}
+\definecolor{lightnavy}{HTML}{EAF1F5}
+\definecolor{darkgray}{HTML}{3F4A52}
+\hypersetup{colorlinks=true,linkcolor=navy,citecolor=navy,urlcolor=navy,pdftitle={Segmentation intelligente des clients d'un distributeur en gros},pdfauthor={Saad Sahraoui et Hassan El Hajjam}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\renewcommand{\arraystretch}{1.2}
+\setlist[itemize]{leftmargin=*,itemsep=2pt}
+\setlist[enumerate]{leftmargin=*,itemsep=2pt}
+\titleformat{\chapter}[display]{\bfseries\color{navy}}{\fontsize{15}{18}\selectfont\chaptername\ \thechapter}{8pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{-10pt}{24pt}
+\titleformat{\section}{\Large\bfseries\color{navy}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\bfseries\color{darkgray}}{\thesubsection}{0.7em}{}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small\textcolor{navy}{Segmentation client — ML2}}
+\rhead{\small\textcolor{darkgray}{ENSAM Rabat}}
+\cfoot{\small\thepage\ / \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{gold}\leaders\hrule height \headrulewidth\hfill}}
+\newtcolorbox{pedagogie}{colback=lightnavy,colframe=navy,boxrule=0.5pt,arc=2pt,left=8pt,right=8pt,top=6pt,bottom=6pt,title=\textbf{Point pédagogique}}
+\newtcolorbox{precaution}{colback=white,colframe=gold,boxrule=0.6pt,arc=2pt,left=8pt,right=8pt,top=6pt,bottom=6pt,title=\textbf{Précaution d'interprétation}}
+\newcommand{\sourcefigure}{\small\textit{Source : élaboration propre à partir du dataset UCI Wholesale Customers.}}
+\newcommand{\projectfigure}[3]{\begin{figure}[H]\centering\includegraphics[width=0.94\textwidth,height=0.60\textheight,keepaspectratio]{figures/#1}\caption{#2}\label{#3}\par\vspace{-2pt}\sourcefigure\end{figure}}
+\newcommand{\smallfigure}[3]{\begin{figure}[H]\centering\includegraphics[width=0.82\textwidth,height=0.48\textheight,keepaspectratio]{figures/#1}\caption{#2}\label{#3}\par\vspace{-2pt}\sourcefigure\end{figure}}

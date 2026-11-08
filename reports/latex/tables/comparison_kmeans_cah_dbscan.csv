@@ -1,0 +1,4 @@
+Méthode,Clusters,Silhouette,Points_evalues,Couverture_pct,Bruit_pct,Effectifs,Avantages_limites
+K-Means,2,0.2903284869973543,440,100.0,0.0,"252, 188",Simple et reproductible ; nécessite K et préfère des groupes compacts.
+CAH Ward,2,0.25849531748001764,440,100.0,0.0,"178, 262",Dendrogramme interprétable ; coût et choix de K à surveiller.
+DBSCAN,3,0.288458174911748,210,47.72727272727273,52.27272727272727,"200, 5, 5",Détecte le bruit et des formes denses ; sensible à eps et min_samples.

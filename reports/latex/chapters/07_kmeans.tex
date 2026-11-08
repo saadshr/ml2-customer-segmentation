@@ -1,0 +1,67 @@
+\chapter{K-Means}
+
+\section{Principe}
+K-Means cherche une partition de $n$ observations en $K$ groupes. Chaque groupe est représenté par un centroïde, c'est-à-dire la moyenne des observations qui lui sont affectées. L'algorithme alterne une affectation au centroïde le plus proche et une mise à jour des centroïdes jusqu'à convergence.
+
+L'initialisation \texttt{k-means++} choisit les centres de départ de manière plus informative que des tirages uniformes. Dans le notebook, \texttt{n\_init=20} lance plusieurs initialisations et conserve la solution de plus faible inertie. Le paramètre \texttt{random\_state=42} rend le résultat reproductible.
+
+\begin{equation}
+\mu_k=\frac{1}{|C_k|}\sum_{x_i\in C_k}x_i,
+\qquad
+J=\sum_{k=1}^{K}\sum_{x_i\in C_k}\lVert x_i-\mu_k\rVert^2.
+\end{equation}
+
+\section{Recherche de K}
+Les valeurs $K=2$ à $K=10$ ont été testées sur les six features préparées. Le tableau \ref{tab:kmeanssearch} reprend l'inertie, la silhouette, le nombre d'itérations et les tailles observées.
+
+\begin{table}[H]
+\centering\scriptsize
+\caption{Recherche de K pour K-Means.}
+\label{tab:kmeanssearch}
+\begin{tabular}{rrrrl}
+\toprule
+K & Inertie & Silhouette & Itérations & Effectifs \\
+\midrule
+2 & 1844,06 & 0,2903 & 13 & 252 ; 188 \\
+3 & 1553,41 & 0,2583 & 7 & 145 ; 212 ; 83 \\
+4 & 1386,86 & 0,1885 & 24 & 61 ; 129 ; 132 ; 118 \\
+5 & 1266,15 & 0,1916 & 26 & 90 ; 96 ; 54 ; 100 ; 100 \\
+6 & 1174,54 & 0,1953 & 19 & 91 ; 85 ; 110 ; 15 ; 56 ; 83 \\
+7 & 1086,36 & 0,1958 & 20 & 20 ; 41 ; 48 ; 89 ; 84 ; 118 ; 40 \\
+8 & 1024,05 & 0,1915 & 32 & 78 ; 28 ; 107 ; 46 ; 12 ; 21 ; 80 ; 68 \\
+9 & 973,14 & 0,1965 & 12 & 19 ; 101 ; 84 ; 47 ; 64 ; 42 ; 28 ; 11 ; 44 \\
+10 & 932,00 & 0,1905 & 13 & 18 ; 114 ; 16 ; 45 ; 40 ; 31 ; 42 ; 71 ; 11 ; 52 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\projectfigure{09_kmeans_elbow.png}{Évolution de l'inertie selon le nombre de clusters.}{fig:elbow}
+\projectfigure{10_kmeans_silhouette.png}{Évolution de la silhouette selon le nombre de clusters.}{fig:kmeanssil}
+
+L'inertie décroît lorsque $K$ augmente, ce qui est attendu. Le coude n'est pas utilisé seul comme preuve d'une structure unique. La silhouette maximale parmi les valeurs testées est obtenue pour $K=2$. Cette solution présente également deux groupes de taille raisonnable, contrairement à certaines solutions plus fragmentées.
+
+\section{Modèle final et profils}
+Le modèle final est donc K-Means avec $K=2$. Les paramètres retenus sont :
+\begin{itemize}
+  \item \texttt{init=k-means++} ;
+  \item \texttt{n\_init=20} ;
+  \item \texttt{random\_state=42}.
+\end{itemize}
+Il obtient une inertie de 1844,0641 et une silhouette de 0,2903. Le cluster 0 rassemble 252 clients (57,27\%) et le cluster 1 rassemble 188 clients (42,73\%).
+
+Sur les dépenses originales, le cluster 0 présente une moyenne Fresh de 13973,13 et des moyennes plus faibles pour Milk (2401,75), Grocery (2918,71) et Detergents\_Paper (491,94). Le cluster 1 est davantage orienté Milk (10346,36), Grocery (14697,06), Detergents\_Paper (6084,51) et Delicassen (2177,43), avec une moyenne Fresh de 9355,87.
+
+\projectfigure{11_kmeans_cluster_profiles_heatmap.png}{Profils K-Means relatifs à la moyenne globale.}{fig:kmeansheat}
+\projectfigure{12_kmeans_cluster_means.png}{Dépenses moyennes originales par cluster K-Means.}{fig:kmeansmeans}
+
+Les numéros de clusters sont arbitraires. Ce qui est interprétable est la différence entre les profils, pas le numéro 0 ou 1 en lui-même.
+
+\section{Projection PCA}
+Une PCA à deux composantes a été appliquée uniquement pour visualiser les labels obtenus dans l'espace préparé. PC1 explique 44,08\% de la variance et PC2 27,19\%, soit 71,27\% cumulés.
+
+\projectfigure{13_kmeans_pca_projection.png}{Projection PCA 2D colorée par les labels K-Means.}{fig:pcakmeans}
+
+La figure est une projection et peut masquer des informations présentes dans les six dimensions. K-Means n'a pas été entraîné sur PC1 et PC2.
+
+\section{Discussion}
+Une silhouette de 0,2903 est positive mais modeste. Elle indique une organisation partielle des clients, avec des recouvrements possibles entre groupes. K-Means est retenu comme compromis pratique et descriptif, non comme preuve que le portefeuille possède deux catégories naturelles parfaitement séparées.

@@ -1,0 +1,83 @@
+\chapter{Analyse exploratoire des données}
+
+\section{Objectif de l'EDA}
+L'analyse exploratoire cherche à comprendre les données avant tout calcul de distance. Elle vérifie la qualité du fichier, décrit la dispersion, mesure l'asymétrie, repère les valeurs extrêmes potentielles et examine les associations entre dépenses. Les graphiques ont été produits dans le notebook 02 avec Pandas, NumPy, Matplotlib et Seaborn.
+
+\section{Statistiques descriptives}
+\begin{table}[H]
+\centering\scriptsize
+\caption{Statistiques descriptives des six dépenses originales.}
+\label{tab:descriptives}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Variable & Moyenne & Médiane & Écart-type & Min. & Q1 & Q3 & Max. \\
+\midrule
+Fresh & 12000,30 & 8504,00 & 12647,33 & 3 & 3127,75 & 16933,75 & 112151 \\
+Milk & 5796,27 & 3627,00 & 7380,38 & 55 & 1533,00 & 7190,25 & 73498 \\
+Grocery & 7951,28 & 4755,50 & 9503,16 & 3 & 2153,00 & 10655,75 & 92780 \\
+Frozen & 3071,93 & 1526,00 & 4854,67 & 25 & 742,25 & 3554,25 & 60869 \\
+Detergents\_Paper & 2881,49 & 816,50 & 4767,85 & 3 & 256,75 & 3922,00 & 40827 \\
+Delicassen & 1524,87 & 965,50 & 2820,11 & 3 & 408,25 & 1820,25 & 47943 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Pour chaque variable, la moyenne dépasse la médiane. Cette différence est cohérente avec une queue à droite : quelques clients ont des dépenses très supérieures au niveau central. Le coefficient de variation, défini par $CV=\sigma/\bar{x}$, dépasse 1 pour Milk, Grocery, Frozen, Detergents\_Paper et Delicassen ; il est proche de 1,05 pour Fresh. Cette dispersion justifie de ne pas utiliser les montants bruts directement dans les distances.
+
+\section{Qualité des données}
+Les contrôles donnent zéro valeur manquante, zéro doublon exact et zéro dépense négative. Aucune dépense n'est égale à zéro dans les six colonnes, ce qui signifie que l'étude de \texttt{log1p} n'est pas motivée par la présence de zéros, mais par la compression des grandes valeurs et la stabilité numérique de la formule.
+
+\section{Distributions et asymétrie}
+La figure \ref{fig:hist} rassemble les six histogrammes et les KDE. Elle montre des distributions concentrées sur des valeurs relativement faibles et prolongées par des queues droites. Les coefficients de skewness sont : Fresh 2,561, Milk 4,054, Grocery 3,587, Frozen 5,908, Detergents\_Paper 3,632 et Delicassen 11,152. Delicassen et Frozen sont donc les variables les plus asymétriques.
+
+\projectfigure{01_histogrammes_kde_depenses.png}{Histogrammes et estimations KDE des dépenses.}{fig:hist}
+
+La KDE est une représentation lissée de la densité et ne remplace pas les observations individuelles. Ici, l'intérêt principal est de visualiser les queues et la concentration, avant de choisir une transformation.
+
+\section{Valeurs extrêmes et règle IQR}
+Pour une variable donnée, l'écart interquartile est $IQR=Q_3-Q_1$. Les bornes conventionnelles sont :
+\begin{equation}
+[Q_1-1,5\,IQR,\;Q_3+1,5\,IQR].
+\end{equation}
+Les observations situées en dehors de ces bornes sont signalées, sans être automatiquement supprimées. Les nombres de signalements sont Fresh 20, Milk 28, Grocery 24, Frozen 43, Detergents\_Paper 30 et Delicassen 27, soit 172 signalements cumulés. Un même client peut être signalé dans plusieurs colonnes.
+
+\projectfigure{02_boxplots_depenses_iqr.png}{Boxplots et valeurs signalées par la règle IQR.}{fig:boxplots}
+
+Ces signalements peuvent correspondre à de gros acheteurs réels. Les supprimer sans vérification métier pourrait éliminer précisément les profils les plus intéressants. Le prétraitement utilise donc \texttt{log1p} et des mises à l'échelle, mais ne retire aucune ligne.
+
+\section{Corrélations}
+La corrélation de Pearson mesure une association linéaire standardisée. La plus forte est observée entre Grocery et Detergents\_Paper ($r=0,925$), suivie de Milk--Grocery ($r=0,728$) et Milk--Detergents\_Paper ($r=0,662$). La corrélation négative la plus marquée est Frozen--Detergents\_Paper ($r=-0,132$), donc faible en valeur absolue.
+
+\projectfigure{03_heatmap_correlations_depenses.png}{Matrice de corrélation de Pearson des six dépenses.}{fig:corr}
+
+La forte association Grocery--Detergents\_Paper signifie que, dans cet échantillon, les clients qui dépensent davantage dans une catégorie tendent aussi à dépenser davantage dans l'autre. Elle ne démontre pas que l'une cause l'autre. Elle indique toutefois que ces deux dimensions peuvent contribuer à distinguer un profil orienté épicerie et produits d'entretien.
+
+\section{Relations bivariées et variables catégorielles}
+Les nuages de points de la figure \ref{fig:scatter} utilisent \texttt{Channel} comme couleur descriptive. La couleur aide à observer des comportements différents entre canaux, mais \texttt{Channel} n'est pas une feature d'apprentissage.
+
+\projectfigure{04_scatterplots_relations_depenses_channel.png}{Relations bivariées entre dépenses, colorées selon Channel.}{fig:scatter}
+
+Les répartitions de Channel et Region sont présentées figure \ref{fig:categories}. Channel comprend 298 clients dans la modalité 1 et 142 dans la modalité 2. Region comprend 77 clients dans la modalité 1, 47 dans la modalité 2 et 316 dans la modalité 3. La table de contingence est :
+\begin{table}[H]
+\centering
+\caption{Table de contingence Channel par Region.}
+\label{tab:contingence}
+\begin{tabular}{lrrr}
+\toprule
+ & Region 1 & Region 2 & Region 3 \\
+\midrule
+Channel 1 & 59 & 28 & 211 \\
+Channel 2 & 18 & 19 & 105 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\projectfigure{05_repartition_channel_region.png}{Répartition de Channel, de Region et table visuelle de contingence.}{fig:categories}
+
+\section{Dépenses par Channel}
+Les moyennes montrent une différence descriptive nette. Le canal 1 a une moyenne Fresh de 13475,56 et Frozen de 3748,25, tandis que le canal 2 a une moyenne Milk de 10716,50, Grocery de 16322,85 et Detergents\_Paper de 7269,51. Les médianes suivent la même direction générale : le canal 2 a une médiane Grocery de 12390 contre 2684 pour le canal 1. Ces écarts peuvent évoquer des portefeuilles commerciaux différents, mais ne prouvent pas leur cause.
+
+\projectfigure{06_comparaison_depenses_par_channel.png}{Comparaison des dépenses par Channel.}{fig:channel}
+
+\section{Synthèse EDA}
+L'EDA conduit à quatre décisions : sélectionner les six dépenses, exclure Channel et Region des distances initiales, ne pas supprimer les signalements IQR et transformer les montants avant clustering. La skewness positive et les amplitudes hétérogènes rendent \texttt{log1p + StandardScaler} particulièrement pertinente comme représentation principale, tout en conservant StandardScaler seul et \texttt{log1p + RobustScaler} pour la sensibilité.

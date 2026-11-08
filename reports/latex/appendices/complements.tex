@@ -1,0 +1,41 @@
+\chapter{Compléments et repères pour la soutenance}
+
+\section{Paramètres principaux}
+\begin{table}[H]
+\centering
+\caption{Paramètres utilisés dans les notebooks de clustering.}
+\label{tab:params}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+Méthode & Paramètres & Interprétation \\
+\midrule
+K-Means & $K=2$, \texttt{init=k-means++}, \texttt{n\_init=20}, \texttt{random\_state=42} & Deux groupes autour de centroïdes. \\
+CAH & $K=2$, \texttt{linkage=ward} & Coupe de la hiérarchie donnant la meilleure silhouette testée. \\
+DBSCAN & \texttt{eps=0,80}, \texttt{min\_samples=5} & Trois groupes et un label bruit pour 230 clients. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Formules utiles}
+\begin{align}
+\text{log1p}(x)&=\log(1+x),\\
+z&=\frac{x-\mu}{\sigma},\\
+IQR&=Q_3-Q_1,\\
+s(i)&=\frac{b(i)-a(i)}{\max(a(i),b(i))}.
+\end{align}
+
+\section{Lecture rapide des fichiers Python}
+\texttt{src/check\_dataset.py} charge le CSV et vérifie dimensions, colonnes, types, valeurs manquantes, doublons et dépenses attendues. \texttt{src/preprocessing.py} centralise l'ordre des six dépenses et construit les pipelines de transformation. Les notebooks utilisent ensuite ces fichiers préparés sans écraser la source.
+
+\section{Glossaire}
+\begin{description}
+\item[Centroïde] moyenne vectorielle des observations d'un cluster K-Means.
+\item[Couverture] proportion des observations effectivement affectées à un cluster ; pour DBSCAN, elle exclut le bruit.
+\item[Inertie] somme des distances quadratiques aux centroïdes, critère spécifique à K-Means.
+\item[Silhouette] mesure interne combinant proximité au propre cluster et séparation du cluster voisin.
+\item[Bruit] observation DBSCAN qui n'est rattachée à aucune zone dense selon les paramètres choisis.
+\item[Skewness] mesure d'asymétrie d'une distribution.
+\end{description}
+
+\section{Ressources graphiques}
+Les 18 figures utilisées dans le rapport sont copiées dans \texttt{reports/latex/figures/}. Les dix tableaux CSV exportés sont conservés dans \texttt{reports/latex/tables/} pour consultation et réutilisation dans Overleaf ou dans une analyse ultérieure.

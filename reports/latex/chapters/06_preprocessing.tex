@@ -1,0 +1,64 @@
+\chapter{Prétraitement des données}
+
+\section{Pourquoi prétraiter ?}
+Les méthodes fondées sur les distances utilisent directement la géométrie des features. Une variable dont les valeurs sont plus grandes peut dominer la distance euclidienne, même si elle n'est pas la plus informative pour distinguer les clients. De plus, les distributions très asymétriques rendent les moyennes et les centroïdes sensibles à quelques grandes valeurs.
+
+Le prétraitement est donc une décision de modélisation. Il ne doit pas être confondu avec un nettoyage qui supprimerait les observations : les 440 clients sont conservés dans toutes les matrices.
+
+\section{Sélection des variables}
+Les six colonnes \texttt{Fresh}, \texttt{Milk}, \texttt{Grocery}, \texttt{Frozen}, \texttt{Detergents\_Paper} et \texttt{Delicassen} sont extraites dans un ordre fixe. \texttt{Channel} et \texttt{Region} sont conservées dans le fichier original pour les profils, mais ne sont pas passées aux algorithmes. L'index \texttt{customer\_index} sert à réaligner les lignes et n'est jamais une feature.
+
+\section{Transformations utilisées}
+La transformation logarithmique est :
+\begin{equation}
+x' = \log(1+x).
+\end{equation}
+Le terme 1 rend la transformation définie pour $x=0$. Dans ce dataset, les dépenses sont positives, mais \texttt{log1p} reste la fonction réutilisable documentée dans le module Python.
+
+La standardisation utilise :
+\begin{equation}
+z=\frac{x-\mu}{\sigma},
+\end{equation}
+où $\mu$ et $\sigma$ sont calculés sur la feature d'entraînement. Le résultat est centré et réduit à la précision numérique près.
+
+Le RobustScaler utilise la médiane et l'écart interquartile :
+\begin{equation}
+r=\frac{x-\operatorname{mediane}(x)}{IQR(x)}.
+\end{equation}
+Il est moins sensible aux valeurs extrêmes pour le centrage et l'échelle, mais il ne corrige pas à lui seul la skewness.
+
+\section{Trois stratégies comparées}
+\begin{table}[H]
+\centering
+\caption{Stratégies de prétraitement étudiées.}
+\label{tab:strategies}
+\begin{tabularx}{\textwidth}{>{\bfseries}l X X}
+\toprule
+Stratégie & Opérations & Lecture \\
+\midrule
+A & StandardScaler seul & Met les variables sur une échelle comparable, sans réduire directement l'asymétrie. \\
+B & log1p puis StandardScaler & Compresse les grandes valeurs puis standardise ; candidate principale. \\
+C & log1p puis RobustScaler & Compresse les grandes valeurs et utilise médiane/IQR ; alternative de sensibilité. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\projectfigure{07_preprocessing_distributions_comparison.png}{Comparaison des distributions avant et après prétraitement.}{fig:preprocessdist}
+
+\projectfigure{08_preprocessing_boxplots_comparison.png}{Comparaison des boxplots selon les stratégies.}{fig:preprocessbox}
+
+Les figures montrent que \texttt{log1p} réduit l'effet visuel des queues. StandardScaler seul change surtout le centre et l'échelle : il ne corrige pas intrinsèquement la skewness. De même, une transformation affine positive conserve la structure de l'IQR à un facteur d'échelle près. Le choix de B est donc motivé par la combinaison d'une compression logarithmique et d'une échelle commune, pas par une prétention à supprimer toute asymétrie.
+
+\section{Implémentation réutilisable}
+Le module \texttt{src/preprocessing.py} centralise la liste des features, construit les trois stratégies et sauvegarde les matrices ainsi que les objets de transformation. Cette organisation évite de recopier des formules dans plusieurs notebooks et permet de réappliquer les mêmes paramètres à de nouvelles observations.
+
+Les fichiers exportés sont les suivants :
+\begin{itemize}
+  \item \path{customers_standard_scaled.csv} ;
+  \item \path{customers_log_standard_scaled.csv} ;
+  \item \path{customers_log_robust_scaled.csv}.
+\end{itemize}
+Les transformateurs sont sauvegardés dans \path{preprocessing_transformers.pkl}. Les trois matrices ont 440 lignes et six colonnes, sans valeur NaN ni infinie.
+
+\section{Choix de la représentation principale}
+La stratégie B, \texttt{log1p + StandardScaler}, est retenue comme candidate principale pour le clustering. Les stratégies A et C sont conservées comme alternatives de sensibilité. Ce choix est méthodologique et ne constitue pas un vainqueur universel : la qualité finale doit être jugée avec les partitions, les métriques et l'interprétation des profils.

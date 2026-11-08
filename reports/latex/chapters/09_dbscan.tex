@@ -1,0 +1,40 @@
+\chapter{DBSCAN}
+
+\section{Principe basé sur la densité}
+DBSCAN recherche des zones où les observations sont suffisamment denses. Le paramètre \texttt{eps} définit le rayon du voisinage et \texttt{min\_samples} le nombre minimal de points requis pour considérer une observation comme un point central (\textit{core point}). Les points proches d'un point central peuvent devenir des points de bord (\textit{border points}). Les observations qui ne rejoignent aucune région dense reçoivent le label -1 et sont dites bruit.
+
+Cette logique est différente de K-Means : DBSCAN ne demande pas de fixer K à l'avance et peut reconnaître du bruit. En revanche, ses résultats sont sensibles à \texttt{eps}, \texttt{min\_samples}, à la dimension et à la représentation des données.
+
+\section{Configurations testées}
+Le notebook a testé \texttt{eps} entre 0,30 et 1,20, ainsi que \texttt{min\_samples} égal à 5 ou 10. Pour chaque configuration, le nombre de clusters, le nombre de points bruités, la couverture et la silhouette sur les points non bruités ont été calculés.
+
+La configuration analysée dans la comparaison est \texttt{eps=0,80}, \texttt{min\_samples=5}. Elle produit trois clusters, dont les tailles sont 200, 5 et 5, ainsi que 230 points de bruit. La couverture est donc de 210/440, soit 47,73\%. La silhouette calculée sur les 210 points non bruités est 0,2885.
+
+\begin{table}[H]
+\centering
+\caption{Résultats DBSCAN pour la configuration analysée et une configuration plus sélective.}
+\label{tab:dbscan}
+\scriptsize
+\begin{tabularx}{\textwidth}{lrrrrX}
+\toprule
+Configuration & Clusters & Bruit & Couverture & Points évalués & Silhouette \\
+\midrule
+eps=0,80, min=5 & 3 & 52,27\% & 47,73\% & 210 & 0,2885 \\
+eps=0,80, min=10 & 2 & 75,91\% & 24,09\% & 106 & 0,5372 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\projectfigure{16_dbscan_grid_results.png}{Taux de bruit et silhouette hors bruit selon les configurations DBSCAN.}{fig:dbscan}
+
+\section{Pourquoi la silhouette élevée n'est pas suffisante}
+La configuration \texttt{eps=0,80}, \texttt{min\_samples=10} obtient 0,5372 sur seulement 106 clients. La valeur est intéressante localement, mais 334 clients sont alors exclus, soit 75,91\% de bruit. Il serait trompeur de la présenter comme une meilleure segmentation du portefeuille complet.
+
+La configuration analysée avec \texttt{min\_samples=5} conserve 210 points, mais elle produit deux groupes de cinq clients seulement et un groupe de 200 clients. Elle met en évidence des zones denses et des observations éloignées, mais ne fournit pas une partition globale équilibrée.
+
+\begin{precaution}
+Le bruit DBSCAN n'est pas automatiquement une anomalie commerciale. Il peut correspondre à un client atypique, à un mélange de profils ou à une densité insuffisante dans l'espace choisi. Une validation métier serait nécessaire avant toute décision.
+\end{precaution}
+
+\section{Conclusion DBSCAN}
+Dans les configurations étudiées, aucune solution ne satisfait simultanément au moins deux clusters, une couverture d'au moins 70\% et une silhouette calculable satisfaisante. DBSCAN est donc utile comme analyse de densité et de cas atypiques, mais il n'est pas retenu comme partition principale du portefeuille.

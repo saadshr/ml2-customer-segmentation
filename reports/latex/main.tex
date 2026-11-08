@@ -1,0 +1,89 @@
+\documentclass[12pt,oneside]{book}
+\input{preamble}
+
+\begin{document}
+% La page de garde ne doit pas entrer en conflit avec l'ancre de la page 1
+% du corps du rapport dans les signets PDF.
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\centering
+\vspace*{0.35cm}
+\noindent
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}cc@{}}
+  \includegraphics[height=2.55cm,keepaspectratio]{figures/logo_um5.png} &
+  \includegraphics[height=2.55cm,keepaspectratio]{figures/logo_ensam_rabat.png}
+\end{tabular*}
+\vspace{0.35cm}
+{\Large\textsc{Université Mohammed V}\par}
+\vspace{0.25cm}
+{\large\textsc{École Nationale Supérieure d'Arts et Métiers — ENSAM Rabat}\par}
+\vspace{0.9cm}
+\vspace{0.35cm}
+{\large Filière : Ingénierie Numérique en Data Science, Intelligence Artificielle et Santé Digitale (INDIA)\par}
+\vspace{0.25cm}
+{\large Module : Machine Learning 2\par}
+\vfill
+{\color{navy}\rule{\textwidth}{1.2pt}}\\[0.45cm]
+{\Huge\bfseries\color{navy} Segmentation intelligente des clients\\[0.15cm] d'un distributeur en gros\par}
+\vspace{0.25cm}
+{\Large\textcolor{darkgray}{Étude comparative des algorithmes K-Means, CAH et DBSCAN}\par}
+{\color{gold}\rule{\textwidth}{1.2pt}}
+\vfill
+\begin{tabular}{ll}
+\textbf{Réalisé par :} & Saad Sahraoui et Hassan El Hajjam\\
+\textbf{Encadré par :} & Pr. Safaâ Dafrallah\\
+\textbf{Année universitaire :} & 2026/2027
+\end{tabular}
+\vfill
+{\large\today\par}
+\end{titlepage}
+
+\frontmatter
+\hypersetup{pageanchor=true}
+\chapter*{Résumé}
+Ce rapport présente une étude complète de segmentation non supervisée appliquée au dataset \textit{Wholesale Customers} de l'UCI Machine Learning Repository. L'objectif est d'identifier des groupes de clients d'un distributeur en gros à partir de six catégories de dépenses annuelles : \textit{Fresh}, \textit{Milk}, \textit{Grocery}, \textit{Frozen}, \textit{Detergents\_Paper} et \textit{Delicassen}. Les variables \textit{Channel} et \textit{Region}, bien que codées numériquement, sont exclues des distances et réservées à l'interprétation.
+
+Après vérification de 440 observations sans valeur manquante, sans doublon exact et sans dépense négative, trois stratégies de préparation ont été étudiées. La stratégie principale, \texttt{log1p + StandardScaler}, réduit l'effet des asymétries positives et rend les amplitudes plus comparables. K-Means, la CAH Ward et DBSCAN sont ensuite comparés avec la silhouette, les effectifs, la couverture et l'interprétabilité. K-Means avec $K=2$ obtient une silhouette de 0,2903 et couvre l'ensemble des clients. La CAH Ward avec $K=2$ obtient 0,2585. DBSCAN révèle des zones denses mais classe 52,27\% des clients comme bruit dans la configuration analysée ; sa silhouette hors bruit n'est donc pas directement comparable. K-Means est retenu comme meilleur compromis parmi les configurations testées, tout en soulignant que la séparation reste modeste.
+
+\textbf{Mots-clés :} apprentissage non supervisé, clustering, segmentation client, K-Means, CAH, DBSCAN, UCI.
+
+\chapter*{Abstract}
+This report presents a complete unsupervised customer-segmentation study based on the UCI \textit{Wholesale Customers} dataset. The analysis uses six annual spending variables and keeps the categorical variables \textit{Channel} and \textit{Region} for interpretation only. After data-quality checks and a comparison of three preprocessing strategies, the main representation is obtained with \texttt{log1p + StandardScaler}. K-Means, Ward agglomerative clustering and DBSCAN are evaluated using silhouette, cluster sizes, coverage and interpretability. K-Means with two clusters reaches a silhouette of 0.2903 on all 440 observations. Ward reaches 0.2585. DBSCAN identifies dense regions but labels 52.27\% of the observations as noise in the analysed configuration; its non-noise silhouette must therefore not be compared directly with full-dataset scores. K-Means is retained as the most balanced option among the tested configurations, although the separation remains modest.
+
+\textbf{Keywords:} unsupervised learning, clustering, customer segmentation, K-Means, hierarchical clustering, DBSCAN.
+
+\chapter*{Abréviations}
+\begin{tabularx}{\textwidth}{>{\bfseries}lX}
+ML & Machine Learning, apprentissage automatique\\
+EDA & Exploratory Data Analysis, analyse exploratoire des données\\
+CAH & Classification Ascendante Hiérarchique\\
+PCA & Principal Component Analysis, analyse en composantes principales\\
+IQR & Interquartile Range, écart interquartile\\
+KDE & Kernel Density Estimate, estimation de densité par noyau\\
+UCI & University of California, Irvine\\
+\end{tabularx}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\mainmatter
+\include{chapters/01_introduction}
+\include{chapters/02_theorie}
+\include{chapters/03_architecture}
+\include{chapters/04_dataset}
+\include{chapters/05_eda}
+\include{chapters/06_preprocessing}
+\include{chapters/07_kmeans}
+\include{chapters/08_cah}
+\include{chapters/09_dbscan}
+\include{chapters/10_comparaison}
+\include{chapters/11_interpretation}
+\include{chapters/12_conclusion}
+
+\appendix
+\include{appendices/complements}
+
+\backmatter
+\printbibliography[heading=bibintoc,title={Bibliographie}]
+\end{document}

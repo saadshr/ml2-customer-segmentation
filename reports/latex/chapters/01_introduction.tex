@@ -1,0 +1,40 @@
+\chapter{Introduction générale}
+
+\section{Contexte de la distribution en gros}
+Les distributeurs en gros travaillent avec des clients dont les habitudes d'achat peuvent différer fortement. Un commerce de proximité, un hôtel ou un restaurant ne consomme pas nécessairement les mêmes catégories de produits, ni dans les mêmes proportions. Dans ce contexte, une lecture globale des ventes peut masquer des sous-populations importantes : certains clients achètent principalement des produits frais et surgelés, tandis que d'autres se concentrent sur l'épicerie, les produits laitiers ou les détergents.
+
+La segmentation client consiste à regrouper des clients qui présentent des caractéristiques proches. Elle peut soutenir la description du portefeuille, la préparation d'offres différenciées et l'organisation d'analyses commerciales. Elle ne remplace toutefois pas la connaissance métier : un groupe mathématique n'est pas automatiquement un segment commercial validé.
+
+\section{Limites d'une segmentation manuelle}
+Une segmentation construite uniquement à partir de règles expertes peut être utile, mais elle dépend fortement des seuils choisis et devient difficile à maintenir lorsque les variables sont nombreuses. Les dépenses du dataset étudié ont des amplitudes très différentes et des distributions fortement asymétriques. Un seuil fixe peut alors favoriser les plus gros acheteurs ou confondre une différence de volume avec une différence de comportement.
+
+L'apprentissage non supervisé offre une démarche complémentaire. Il permet de rechercher une structure dans les observations sans fournir à l'avance une classe correcte. Les groupes obtenus sont des hypothèses quantitatives à examiner, et non des vérités commerciales définitives.
+
+\section{Problématique et question de recherche}
+La question étudiée est la suivante :
+
+\begin{pedagogie}
+Comment identifier et interpréter des groupes de clients d'un distributeur en gros à partir de leurs dépenses annuelles, puis comparer K-Means, la CAH Ward et DBSCAN en tenant compte de la cohésion, de la séparation, de la couverture et de l'interprétabilité ?
+\end{pedagogie}
+
+Cette formulation impose deux précautions. Premièrement, les variables utilisées pour les distances doivent représenter les comportements de dépenses. Deuxièmement, les scores doivent être interprétés avec le contexte de chaque algorithme : DBSCAN peut laisser des observations en bruit, alors que K-Means et la CAH affectent tous les clients à un groupe.
+
+\section{Objectifs du projet}
+Les objectifs sont :
+\begin{itemize}
+  \item vérifier la structure et la qualité du dataset UCI Wholesale Customers ;
+  \item décrire les distributions, les asymétries, les valeurs extrêmes et les corrélations ;
+  \item comparer trois stratégies de préparation des six dépenses ;
+  \item appliquer K-Means, CAH Ward et DBSCAN avec des paramètres explicitement documentés ;
+  \item évaluer les partitions avec des mesures internes et les tailles des groupes ;
+  \item revenir aux dépenses originales pour interpréter les profils ;
+  \item formuler une conclusion prudente, sans présenter un cluster comme une causalité commerciale.
+\end{itemize}
+
+\section{Démarche générale}
+La démarche suit une progression reproductible. Le fichier original est conservé dans \texttt{data/raw/}. Le contrôle initial vérifie les dimensions, les types, les valeurs manquantes et les doublons. L'EDA étudie les statistiques et les graphiques. Le prétraitement produit trois matrices distinctes. K-Means est ensuite étudié avec plusieurs valeurs de $K$, puis la CAH et DBSCAN sont exécutés sur la représentation principale \texttt{log1p + StandardScaler}.
+
+Les résultats produits par les notebooks sont enregistrés dans \texttt{results/figures/} et \texttt{results/tables/}. Cette organisation sépare les données sources, les données préparées, le code d'analyse et les résultats consultables.
+
+\section{Organisation du rapport}
+Le chapitre 2 introduit les notions de clustering et de distance. Le chapitre 3 présente l'architecture technique et le protocole de reproductibilité. Le chapitre 4 décrit le dataset. Les chapitres 5 et 6 traitent respectivement l'EDA et le prétraitement. Les chapitres 7, 8 et 9 expliquent les trois algorithmes et leurs résultats. Le chapitre 10 réalise la comparaison, le chapitre 11 interprète les profils, et le chapitre 12 conclut l'étude. Les annexes regroupent les tableaux complémentaires et les repères pour la soutenance.

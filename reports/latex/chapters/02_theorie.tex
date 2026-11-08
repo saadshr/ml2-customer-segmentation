@@ -1,0 +1,43 @@
+\chapter{Fondements théoriques}
+
+\section{Machine Learning et apprentissage non supervisé}
+Le Machine Learning désigne un ensemble de méthodes qui apprennent des régularités à partir de données. Dans un apprentissage supervisé, chaque observation est associée à une cible connue : par exemple une classe ou une valeur à prédire. Dans un apprentissage non supervisé, aucune cible de ce type n'est fournie. L'algorithme cherche une organisation interne des observations.
+
+Dans ce projet, le fichier ne contient pas de label de cluster. \texttt{Channel} et \texttt{Region} décrivent des catégories observées, mais elles ne constituent pas une vérité cible pour entraîner les distances. Les clusters sont donc découverts uniquement à partir des six dépenses.
+
+\begin{pedagogie}
+Une classe est une catégorie connue ou définie par une règle externe. Un cluster est un groupe découvert par l'algorithme selon une notion de proximité ou de densité. Deux clusters portant le même numéro dans deux méthodes ne représentent pas nécessairement les mêmes clients.
+\end{pedagogie}
+
+\section{Observations, variables et features}
+Une observation correspond ici à un client. Une variable est une colonne mesurée pour chaque client. Le terme \textit{feature} désigne une variable fournie à l'algorithme pour construire les distances. Les six features retenues sont \texttt{Fresh}, \texttt{Milk}, \texttt{Grocery}, \texttt{Frozen}, \texttt{Detergents\_Paper} et \texttt{Delicassen}.
+
+Un label de cluster est une sortie de l'algorithme. Il ne doit pas être confondu avec une feature d'entrée. \texttt{customer\_index} est un identifiant de ligne ; l'ajouter aux distances introduirait une proximité artificielle liée à l'ordre du fichier.
+
+\section{Distances, cohésion et séparation}
+Pour deux vecteurs $x=(x_1,\ldots,x_p)$ et $y=(y_1,\ldots,y_p)$, la distance euclidienne est :
+\begin{equation}
+d(x,y)=\sqrt{\sum_{j=1}^{p}(x_j-y_j)^2}.
+\end{equation}
+La cohésion mesure si les observations d'un même groupe sont proches. La séparation mesure si les groupes sont éloignés entre eux. Ces notions dépendent de l'espace utilisé : une feature avec une amplitude beaucoup plus grande peut dominer la distance si elle n'est pas préparée.
+
+La fonction d'inertie de K-Means est un exemple de critère de cohésion :
+\begin{equation}
+J=\sum_{k=1}^{K}\sum_{x_i\in C_k}\lVert x_i-\mu_k\rVert^2,
+\end{equation}
+où $C_k$ est le cluster $k$ et $\mu_k$ son centroïde. La séparation n'est pas une propriété absolue : un score doit être lu avec le nombre de groupes, les effectifs et la représentation choisie.
+
+\section{Familles d'algorithmes}
+Les méthodes de partition comme K-Means recherchent directement plusieurs groupes. Les méthodes hiérarchiques construisent une succession de fusions ou de divisions, ce qui permet de visualiser une structure multi-niveaux. Les méthodes de densité recherchent des zones où les observations sont suffisamment nombreuses et peuvent reconnaître du bruit.
+
+K-Means et la CAH Ward utilisent une logique de groupes compacts dans l'espace préparé. DBSCAN utilise plutôt la densité locale. Cette différence explique pourquoi leurs résultats ne doivent pas être comparés uniquement avec un nombre décimal : leurs objectifs et leurs ensembles d'observations évalués peuvent différer.
+
+\section{Score de silhouette}
+Pour une observation $i$, on note $a(i)$ sa distance moyenne aux observations de son propre cluster et $b(i)$ la plus petite distance moyenne à un autre cluster. La silhouette individuelle est :
+\begin{equation}
+s(i)=\frac{b(i)-a(i)}{\max(a(i),b(i))}.
+\end{equation}
+Le score moyen est la moyenne de $s(i)$. Une valeur proche de 1 suggère des groupes bien séparés, une valeur proche de 0 un chevauchement, et une valeur négative une affectation possiblement mal adaptée. Cette lecture est indicative : la silhouette dépend de la distance, du prétraitement et de la partition.
+
+\section{Pourquoi préparer les données ?}
+Les six dépenses sont positives, asymétriques et d'amplitudes différentes. La transformation logarithmique \texttt{log1p} est définie par $\log(1+x)$ ; elle comprime les grandes valeurs tout en restant définie pour zéro. Une standardisation transforme ensuite chaque feature selon sa moyenne et son écart-type. Ces opérations ne changent pas le nombre de clients, mais changent la géométrie utilisée par les algorithmes.

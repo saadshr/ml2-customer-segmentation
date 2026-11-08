@@ -19,3 +19,19 @@ results/tables/*
 # Fichiers temporaires Windows
 Thumbs.db
 .DS_Store
+
+# Fichiers auxiliaires générés par LaTeX (les sources, figures, tableaux
+# et le PDF final du rapport restent versionnables)
+reports/latex/**/*.aux
+reports/latex/**/*.bbl
+reports/latex/**/*.bcf
+reports/latex/**/*.blg
+reports/latex/**/*.fdb_latexmk
+reports/latex/**/*.fls
+reports/latex/**/*.lof
+reports/latex/**/*.log
+reports/latex/**/*.lot
+reports/latex/**/*.out
+reports/latex/**/*.run.xml
+reports/latex/**/*.synctex.gz
+reports/latex/**/*.toc

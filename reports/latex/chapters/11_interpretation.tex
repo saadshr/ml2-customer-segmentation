@@ -1,0 +1,24 @@
+\chapter{Interprétation commerciale prudente}
+
+\section{Profils K-Means}
+Le premier profil K-Means, de 252 clients, est caractérisé par une moyenne Fresh élevée (13973,13) et des niveaux plus faibles de Milk, Grocery et Detergents\_Paper. Le second profil, de 188 clients, présente des dépenses moyennes beaucoup plus élevées pour Milk (10346,36), Grocery (14697,06), Detergents\_Paper (6084,51) et Delicassen (2177,43). Il s'agit d'une description statistique des groupes, pas d'une étiquette commerciale officielle.
+
+\section{Profils CAH Ward}
+La CAH produit un groupe de 178 clients dont les moyennes Milk, Grocery et Detergents\_Paper sont élevées : respectivement 9338,17, 14247,11 et 6214,91. L'autre groupe, de 262 clients, est davantage caractérisé par Fresh (15016,10) et Frozen (4187,85), avec des niveaux plus faibles pour Milk, Grocery et Detergents\_Paper. Ces tendances ressemblent partiellement à la partition K-Means, mais les groupes ne sont pas identiques.
+
+\section{Profils DBSCAN}
+Dans la configuration \texttt{eps=0,80}, \texttt{min\_samples=5}, le groupe DBSCAN de 200 clients présente des moyennes intermédiaires, tandis que deux groupes de cinq clients ont des dépenses Milk, Grocery et Detergents\_Paper très élevées. Les 230 points de bruit ont un profil moyen qui mélange plusieurs comportements. Ce mélange rappelle que le label bruit indique une position dans la géométrie de densité, et non un type de client reconnu par le métier.
+
+\projectfigure{18_profiles_methods_original.png}{Comparaison des profils moyens dans les unités originales.}{fig:profilesall}
+
+\section{Rôle de Channel et Region}
+Les variables Channel et Region n'ont pas été utilisées pour entraîner les distances. Elles peuvent néanmoins aider à décrire la composition des groupes après coup. Dans l'EDA, Channel 1 compte 298 clients et Channel 2 en compte 142. Les différences de moyennes sont particulièrement visibles pour Milk, Grocery et Detergents\_Paper. Cette information est cohérente avec l'existence de comportements d'achat différents selon le canal, mais elle ne doit pas être transformée en causalité.
+
+Region est très déséquilibrée : la modalité 3 compte 316 clients contre 77 pour la modalité 1 et 47 pour la modalité 2. Une répartition observée dans un cluster doit donc être comparée à cette base globale et non interprétée isolément.
+
+\section{Pistes commerciales, sous réserve de validation}
+À titre d'hypothèses à valider avec les responsables métier, un groupe orienté Fresh et Frozen pourrait faire l'objet d'une analyse de disponibilité et de rotation des produits frais et surgelés. Un groupe orienté Milk, Grocery et Detergents\_Paper pourrait être étudié pour des offres liées aux achats récurrents d'épicerie et d'entretien. Ces propositions ne sont pas des résultats démontrés par le clustering : elles doivent être confrontées aux marges, aux fréquences de commande, aux coûts logistiques et à l'historique temporel.
+
+\begin{precaution}
+Un cluster décrit une proximité dans les six dépenses choisies. Il ne permet pas de conclure sur la rentabilité, la fidélité, la cause d'achat ou l'efficacité d'une campagne marketing. Ces dimensions nécessiteraient des variables supplémentaires et une validation externe.
+\end{precaution}

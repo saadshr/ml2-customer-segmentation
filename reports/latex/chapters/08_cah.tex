@@ -1,0 +1,35 @@
+\chapter{Classification ascendante hiérarchique}
+
+\section{Principe de la CAH}
+La Classification Ascendante Hiérarchique commence avec une observation par groupe puis fusionne progressivement les groupes les plus proches. Le processus construit une hiérarchie représentée par un dendrogramme. Une coupe horizontale du dendrogramme détermine ensuite le nombre de groupes.
+
+Le choix de la liaison modifie le résultat. Le saut minimum peut produire un effet de chaîne, le saut maximum favorise des groupes compacts, et la liaison moyenne utilise une distance moyenne. Ward choisit les fusions qui entraînent la plus faible augmentation de la variance intra-groupe. Dans ce projet, \texttt{linkage=ward} est appliqué aux six variables préparées.
+
+\section{Recherche de la coupe}
+Les valeurs K=2 à K=6 ont été comparées :
+\begin{table}[H]
+\centering
+\caption{Scores CAH Ward pour les valeurs de K testées.}
+\label{tab:cahsearch}
+\begin{tabular}{rrrr}
+\toprule
+K & Silhouette & Taille minimale & Effectifs \\
+\midrule
+2 & 0,2585 & 178 & 178 ; 262 \\
+3 & 0,2547 & 53 & 262 ; 53 ; 125 \\
+4 & 0,2021 & 53 & 53 ; 208 ; 125 ; 54 \\
+5 & 0,2025 & 18 & 208 ; 18 ; 125 ; 54 ; 35 \\
+6 & 0,1707 & 18 & 125 ; 18 ; 150 ; 54 ; 35 ; 58 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\projectfigure{14_cah_dendrogramme_ward.png}{Dendrogramme tronqué de la CAH avec liaison Ward.}{fig:dendro}
+\projectfigure{15_cah_silhouette.png}{Silhouette selon K pour la CAH Ward.}{fig:cahsil}
+
+Le meilleur score de silhouette est obtenu pour $K=2$, avec 0,2585. Les effectifs sont 178 et 262, donc la partition couvre les 440 clients sans bruit et sans groupe minuscule. Le score diminue pour les valeurs supérieures de K, même si l'inertie hiérarchique n'est pas utilisée comme critère principal dans ce notebook.
+
+\section{Différence avec K-Means}
+K-Means et la CAH Ward retiennent tous deux deux groupes, mais les affectations ne sont pas identiques. K-Means optimise directement l'inertie autour de centroïdes ; la CAH conserve la logique de fusions successives. Les profils moyens originaux permettent de comparer les tendances sans supposer que le cluster 0 d'une méthode correspond au cluster 0 de l'autre.
+
+La CAH fournit un support visuel intéressant grâce au dendrogramme. Son score inférieur à K-Means dans cette représentation ne signifie pas que la CAH est inutile : elle décrit une hiérarchie et donne une autre lecture de la structure du portefeuille.

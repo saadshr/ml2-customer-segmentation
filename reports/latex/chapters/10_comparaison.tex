@@ -1,0 +1,36 @@
+\chapter{Comparaison des algorithmes}
+
+\section{Cadre d'évaluation}
+Une évaluation interne examine la structure produite sans disposer d'une vérité terrain. La silhouette combine cohésion et séparation. K-Means possède en plus l'inertie, directement liée à son objectif. Pour comparer correctement les méthodes, il faut aussi regarder les effectifs, la couverture et la facilité d'interprétation.
+
+K-Means et CAH affectent chacun les 440 clients à un cluster. DBSCAN peut affecter des clients au bruit. Son score de silhouette est donc accompagné du nombre de points évalués et du taux de couverture.
+
+\section{Tableau comparatif}
+\begin{table}[H]
+\centering\scriptsize
+\caption{Comparaison finale des trois méthodes.}
+\label{tab:comparison}
+\begin{tabularx}{\textwidth}{lrrrrX}
+\toprule
+Méthode & Clusters & Silhouette & Points & Bruit & Effectifs et lecture \\
+\midrule
+K-Means & 2 & 0,2903 & 440 & 0\% & 252 ; 188. Partition complète, simple et équilibrée. \\
+CAH Ward & 2 & 0,2585 & 440 & 0\% & 178 ; 262. Partition complète et dendrogramme lisible. \\
+DBSCAN & 3 & 0,2885* & 210* & 52,27\% & 200 ; 5 ; 5, avec 230 points bruit. Partition globale déséquilibrée. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textit{*} Le score DBSCAN est calculé sans les 230 points bruités. Sa couverture est 47,73\% ; il ne doit donc pas être comparé directement aux scores calculés sur les 440 observations.
+
+\projectfigure{17_comparison_silhouette.png}{Comparaison visuelle des scores de silhouette.}{fig:comparisonsil}
+
+\section{Analyse des avantages et limites}
+K-Means obtient le meilleur compromis numérique parmi les solutions complètes testées. Il est facile à réexécuter, ses effectifs sont raisonnables et ses profils sont directement exploitables. Sa limite est la nécessité de choisir K et sa préférence pour une géométrie de groupes compacts.
+
+La CAH donne une silhouette plus faible, mais elle permet d'observer la hiérarchie des fusions. Elle est pertinente lorsque la question porte sur plusieurs niveaux de regroupement. Son résultat dépend cependant de la liaison et de la coupe du dendrogramme.
+
+DBSCAN est le seul à expliciter un bruit. Cette propriété est précieuse lorsqu'il existe des observations isolées ou des groupes de densité différente. Ici, le bruit représente toutefois plus de la moitié des clients dans la configuration analysée. Une silhouette hors bruit élevée dans une configuration très peu couverte ne suffit donc pas pour recommander DBSCAN comme segmentation globale.
+
+\section{Choix final}
+K-Means est retenu comme meilleur compromis \emph{parmi les configurations étudiées}. Ce choix ne signifie pas qu'il serait optimal pour toute autre représentation, tout autre dataset ou toute autre finalité. La silhouette de 0,2903 reste modeste et signale que les deux groupes se recouvrent partiellement.

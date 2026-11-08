@@ -1,0 +1,39 @@
+\chapter{Présentation du dataset}
+
+\section{Origine et périmètre}
+Le dataset \textit{Wholesale Customers} est disponible dans l'UCI Machine Learning Repository sous l'identifiant 292 \cite{uciWholesale}. Il comporte 440 observations et huit colonnes. Chaque ligne correspond à un client et les variables de dépenses représentent des montants annuels dont l'unité monétaire n'est pas précisée par la source.
+
+Le fichier contient six dépenses quantitatives et deux variables codées : \texttt{Channel} et \texttt{Region}. Ces deux dernières sont utiles pour décrire les groupes après clustering, mais leur codage entier ne signifie pas qu'elles sont des mesures continues. Les distances initiales sont donc calculées uniquement sur les six dépenses.
+
+\section{Description des variables}
+\begin{table}[H]
+\centering\small
+\caption{Description des huit variables du dataset.}
+\label{tab:variables}
+\begin{tabularx}{\textwidth}{>{\ttfamily}l X l X}
+\toprule
+Variable & Signification & Nature & Rôle \\
+\midrule
+Channel & Canal commercial codé & Catégorielle & Interprétation \\
+Region & Région codée & Catégorielle & Interprétation \\
+Fresh & Produits frais & Quantitative & Feature de clustering \\
+Milk & Produits laitiers & Quantitative & Feature de clustering \\
+Grocery & Épicerie & Quantitative & Feature de clustering \\
+Frozen & Produits surgelés & Quantitative & Feature de clustering \\
+Detergents\_Paper & Détergents et papier & Quantitative & Feature de clustering \\
+Delicassen & Produits delicatessen & Quantitative & Feature de clustering \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Premières observations et choix des features}
+Les dépenses sont toutes strictement positives dans le fichier : aucune valeur nulle n'a été observée pour les six catégories. Les valeurs ne sont pas homogènes : \texttt{Fresh} atteint 112151 alors que \texttt{Delicassen} atteint 47943, et les écarts-types sont eux aussi très différents. Un algorithme fondé sur les distances pourrait donc donner trop de poids aux variables ayant les plus grandes amplitudes.
+
+\texttt{Channel} possède deux modalités, 1 et 2, et \texttt{Region} trois modalités, 1, 2 et 3. Leur présence dans un tableau Pandas en \texttt{int64} ne les transforme pas en variables quantitatives adaptées à une distance euclidienne. Les inclure directement créerait une hiérarchie numérique artificielle entre les codes.
+
+\begin{precaution}
+Les labels de clusters n'existent pas dans le dataset. Les regroupements étudiés sont des structures découvertes par les algorithmes ; ils devront être interprétés comme des profils exploratoires et non comme des catégories officielles de clients.
+\end{precaution}
+
+\section{Qualité structurelle initiale}
+Le contrôle effectué dans \texttt{src/check\_dataset.py} confirme 440 lignes, huit colonnes, zéro valeur manquante et zéro doublon exact. Les six dépenses ne contiennent aucune valeur négative. Les résultats détaillés de l'EDA sont présentés au chapitre suivant.
