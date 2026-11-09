@@ -268,7 +268,7 @@ La reproductibilité de l’exécution ne constitue pas une étude de stabilité
 - La stabilité des clusters doit encore être étudiée.
 - Les profils doivent être validés avec des informations métier et des actions commerciales réelles.
 
-Ces éléments sont des limites ou des perspectives ; ils ne sont pas présentés comme des analyses déjà réalisées.
+Ces éléments sont des limites ou des perspectives ; ils ne sont pas présentés comme des analyses déjà réalisées..
 
 ## Références
 
