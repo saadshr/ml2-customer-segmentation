@@ -7,7 +7,7 @@
 [![Jupyter](https://img.shields.io/badge/Jupyter-notebooks-F37626?logo=jupyter&logoColor=white)](https://jupyter.org/)
 [![Status](https://img.shields.io/badge/Project%20status-final%20academic%20version-2ea44f)](#résultats-et-comparaison)
 
-Projet académique du module **Machine Learning 2**, réalisé à l’**ENSAM Rabat**, filière **INDIA**, année universitaire **2026/2027**.
+Projet académique du module **Machine Learning 2**, réalisé à l’**ENSAM Rabat**, filière **INDIA 2eme annee**, année universitaire **2026/2027**.
 
 ## Présentation du projet
 
