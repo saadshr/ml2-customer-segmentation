@@ -109,7 +109,7 @@ flowchart LR
 
 ## Analyse exploratoire
 
-Les dépenses présentent des asymétries positives. La skewness de `Delicassen` atteint 11,152. La règle IQR signale 172 valeurs cumulées sur les six dépenses ; ces signalements ne correspondent pas nécessairement à 172 clients distincts et aucune observation n’est supprimée.
+Les dépenses présentent des asymétries positives a droite . La skewness de `Delicassen` atteint 11,152. La règle IQR signale 172 valeurs cumulées sur les six dépenses ; ces signalements ne correspondent pas nécessairement à 172 clients distincts et aucune observation n’est supprimée.
 
 La corrélation de Pearson la plus forte concerne `Grocery` et `Detergents_Paper` avec `r = 0,925`. Cette association est descriptive et ne démontre pas de causalité.
 
